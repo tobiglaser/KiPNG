@@ -1,0 +1,34 @@
+{
+  "$schema": "https://go.kicad.org/api/schemas/v1",
+  "identifier": "com.github.tobiglaser.kipng",
+  "name": "KiPNG",
+  "description": "Export PNGs with variable DPI right from pcbnew",
+  "runtime": {
+    "type": "python",
+    "min_version": "3.10"
+  },
+  "actions": [
+    {
+      "identifier": "exportpng",
+      "name": "Export PNG",
+      "description": "Set DPI and export PNG",
+      "show-button": true,
+      "scopes": [
+          "pcb"
+      ],
+      "entrypoint": "main.py",
+      "icons-light": [
+        "icons/light16.png",
+        "icons/light24.png",
+        "icons/light32.png",
+        "icons/light64.png"
+      ],
+      "icons-dark": [
+        "icons/dark16.png",
+        "icons/dark24.png",
+        "icons/dark32.png",
+        "icons/dark64.png"
+      ]
+    }
+  ]
+}

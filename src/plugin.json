@@ -1,6 +1,6 @@
 {
   "$schema": "https://go.kicad.org/api/schemas/v1",
-  "identifier": "com.github.tobiglaser.kipng",
+  "identifier": "com.github.tobiglaser.KiPNG",
   "name": "KiPNG",
   "description": "Export PNGs with variable DPI right from pcbnew",
   "runtime": {

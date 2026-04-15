@@ -120,6 +120,7 @@ class App(wx.App):
     def run(self):
         self.on_dpi_change(None)
         self.on_order_flag(None)
+        self.frame.Fit()
         self.frame.Show()
         self.MainLoop()
         pass
@@ -280,9 +281,9 @@ class App(wx.App):
         INCH = 25.4#mm
         self.res_x = ceil(self.dpi_box.Value * self.x / INCH)
         self.res_y = ceil(self.dpi_box.Value * self.y / INCH)
-        self.resolution_label_xy.LabelText = f"\t{self.res_x}x{self.res_y}"
+        self.resolution_label_xy.SetLabel(f"    {self.res_x}x{self.res_y}")
         pixels = self.res_x * self.res_y / 1e6
-        self.resolution_label_mp.LabelText = f"\t {pixels:.2f} MP"
+        self.resolution_label_mp.SetLabel(f"    {pixels:.2f} MP")
 
     def on_shoot(self, event) -> None:
         settings = {}

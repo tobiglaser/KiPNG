@@ -10,6 +10,7 @@ import xml.etree.ElementTree as etree
 import cairosvg
 from PIL import Image
 from time import strftime
+import shlex
 
 
 def generate_png(settings: Dict) -> None:
@@ -55,8 +56,17 @@ def generate_png(settings: Dict) -> None:
     mode = "--mode-single" if settings["keep_order"] else "--mode-multi"
     output_path = path.join(cache_dir, "one_file.svg") if settings["keep_order"] else cache_dir
     
-    print(f'{exe} pcb export svg --output "{output_path}" --layers "{','.join(layer_list)}" {mirror} {mode} "{board_path}"')
-    subprocess.call(f'{exe} pcb export svg --output "{output_path}" --layers "{','.join(layer_list)}" {mirror} {mode} "{board_path}"', shell=True)
+    cmd = [
+        exe,
+        'pcb', 'export', 'svg',
+        '--output', output_path,
+        '--layers', ','.join(layer_list),
+        *([mirror] if mirror else []),
+        mode,
+        board_path
+    ]
+    print(shlex.join(cmd))
+    subprocess.run(cmd, check=True)
     
     svgs = [output_path] if settings["keep_order"] else [path.join(output_path, f"{project_name}-{l.replace('.', '_')}.svg") for l in layer_list]
     print(svgs)
@@ -126,7 +136,7 @@ def generate_png(settings: Dict) -> None:
                 image = Image.open(path.join(cache_dir, f"{xi}{yi}.png"))
                 final_image.paste(image, (xi * image.width, yi * image.height))
         
-        final_image.save(path.join(project_path, f"{strftime("%Y%m%d-%H%M%S")}.png"))
+        final_image.save(path.join(project_path, f"{strftime('%Y%m%d-%H%M%S')}.png"))
     
     else:
         root.set('width', str(x_stride))
@@ -134,7 +144,7 @@ def generate_png(settings: Dict) -> None:
         root.set('viewBox', f"{xmin} {ymin} {x_stride} {y_stride}")
 
         cairosvg.svg2png(bytestring=etree.tostring(root),
-            write_to=path.join(project_path, f"{strftime("%Y%m%d-%H%M%S")}.png"),
+            write_to=path.join(project_path, f"{strftime('%Y%m%d-%H%M%S')}.png"),
             dpi=dpi,
             output_width=x_pixels,
             output_height=y_pixels,

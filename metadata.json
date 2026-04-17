@@ -2,7 +2,7 @@
     "$schema": "https://go.kicad.org/pcm/schemas/v2",
     "name": "PNG Export",
     "description": "PNG export right from pcbnew with variable DPI.",
-    "description_full": "This Plugin is a byproduct of research into different parasitic extraction methods. It requires no external dependencies to python. Uses the built in SVG export, cairosvg and the PIL. Select a Rectangle to specify the exported area. If you select the PCB edge, the bounding box will be used instead. Rotation of the Viewport is currently not supported.",
+    "description_full": "This Plugin is a byproduct of research into different parasitic extraction methods. It requires no external dependencies to python. Uses the built in SVG export, cairosvg and the PIL. Select a Rectangle to specify the exported area. If you select the PCB edge, the bounding box will be used instead. Rotation of the Viewport is currently not supported.\nTested on Linux and Windows.\nIf you are able to provide feedback on macOS, please do so.",
     "identifier": "com.github.tobiglaser.KiPNG",
     "type": "plugin",
     "author": {

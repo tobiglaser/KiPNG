@@ -12,3 +12,5 @@ Settings include
 Since the SVG export targets the file, the output will only include saved changes.
 
 Very large resolutions may currently overwhelm your RAM.
+
+Tested on Linux and Windows. If you are able to provide feedback on macOS, please do so.

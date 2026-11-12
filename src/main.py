@@ -16,9 +16,6 @@ import shlex
 def generate_png(settings: Dict) -> None:
     print(settings)
     kicad = KiCad()
-    settings_dir = kicad.get_plugin_settings_path("com_github_tobiglaser_kipng")
-    if not path.exists(settings_dir):
-        mkdir(settings_dir)
 
     board = kicad.get_board()
     cli_path = kicad.get_kicad_binary_path("kicad-cli")

@@ -30,11 +30,15 @@ class App(wx.App):
         left_box = left_sizer.GetStaticBox()
 
         self.layer_list = wx.ListBox(left_box, choices=[])
+        self.layer_list.SetToolTipString("Available Layers")
         self.frontside_button = wx.Button(left_box, label="Front")
+        self.frontside_button.SetToolTipString("Select Front Layers")
         self.frontside_button.Bind(wx.EVT_BUTTON, self.preset_front)
         self.backside_button = wx.Button(left_box, label="Back")
+        self.backside_button.SetToolTipString("Select Bottom Layers")
         self.backside_button.Bind(wx.EVT_BUTTON, self.preset_back)
         self.copper_button = wx.Button(left_box, label="Copper")
+        self.copper_button.SetToolTipString("Select Copper Layers")
         self.copper_button.Bind(wx.EVT_BUTTON, self.preset_copper)
 
         preset_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -52,10 +56,12 @@ class App(wx.App):
         addsub_sizer = wx.BoxSizer(wx.VERTICAL)
         addsub_sizer.AddStretchSpacer(4)
         right_button = wx.Button(left_box, label="->")
+        right_button.SetToolTipString("Add marked layer(s) to export.")
         right_button.Bind(wx.EVT_BUTTON, self.on_right)
         addsub_sizer.Add(right_button)
         addsub_sizer.AddStretchSpacer(1)
         left_button = wx.Button(left_box, label="<-")
+        left_button.SetToolTipString("Remove marked layer from export.")
         left_button.Bind(wx.EVT_BUTTON, self.on_left)
         addsub_sizer.Add(left_button)
         addsub_sizer.AddStretchSpacer(4)
@@ -65,13 +71,16 @@ class App(wx.App):
         lr_sizer.Add(left_sizer, 2, wx.EXPAND | wx.ALL, 5)
 
         self.plot_list = wx.ListBox(left_box, choices=[])
+        self.plot_list.SetToolTipString("Exported layers (in this order).")
         plot_sizer = wx.BoxSizer(wx.VERTICAL)
         plot_sizer.Add(self.plot_list, 1, wx.EXPAND | wx.ALL, 10)
         ud_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         self.down_button = wx.Button(left_box, label="Down")
+        self.down_button.SetToolTipString("Lower layer in custom order.")
         self.down_button.Bind(wx.EVT_BUTTON, self.on_down)
         self.up_button = wx.Button(left_box, label="Up")
+        self.up_button.SetToolTipString("Elevate layer in custom order.")
         self.up_button.Bind(wx.EVT_BUTTON, self.on_up)
         ud_sizer.Add(self.up_button, 1)
         ud_sizer.AddSpacer(10)
@@ -96,14 +105,17 @@ class App(wx.App):
         right_sizer.Add(self.resolution_label_mp, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
 
         self.flip_flag = wx.CheckBox(right_box, label="Flip && Mirror")
+        self.flip_flag.SetToolTipString("Looking at the bottom side of the PCB.")
         self.flip_flag.Value = False
         self.flip_flag.Bind(wx.EVT_CHECKBOX, self.on_flip_flag)
         right_sizer.Add(self.flip_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
         self.order_flag = wx.CheckBox(right_box, label="Use KiCad ordering")
+        self.order_flag.SetToolTipString("Use KiCads native layer order or a custom order.")
         self.order_flag.Value = True
         self.order_flag.Bind(wx.EVT_CHECKBOX, self.on_order_flag)
         right_sizer.Add(self.order_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
         self.aa_flag = wx.CheckBox(right_box, label="Anti-Aliasing")
+        self.aa_flag.SetToolTipString("Smoother image, less precise edges.")
         self.aa_flag.Value = False
         right_sizer.Add(self.aa_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
 

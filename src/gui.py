@@ -26,13 +26,15 @@ class App(wx.App):
         self.frame.SetIcon(icon)
 
         self.panel = wx.Panel(self.frame)
+        left_sizer = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "Layer Selection:")
+        left_box = left_sizer.GetStaticBox()
 
-        self.layer_list = wx.ListBox(self.panel, choices=[])
-        self.frontside_button = wx.Button(self.panel, label="Front")
+        self.layer_list = wx.ListBox(left_box, choices=[])
+        self.frontside_button = wx.Button(left_box, label="Front")
         self.frontside_button.Bind(wx.EVT_BUTTON, self.preset_front)
-        self.backside_button = wx.Button(self.panel, label="Back")
+        self.backside_button = wx.Button(left_box, label="Back")
         self.backside_button.Bind(wx.EVT_BUTTON, self.preset_back)
-        self.copper_button = wx.Button(self.panel, label="Copper")
+        self.copper_button = wx.Button(left_box, label="Copper")
         self.copper_button.Bind(wx.EVT_BUTTON, self.preset_copper)
 
         preset_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -46,15 +48,14 @@ class App(wx.App):
         sel_list_sizer.Add(self.layer_list, 1, wx.EXPAND | wx.ALL, 10)
         sel_list_sizer.Add(preset_sizer, 0, wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
         
-        left_sizer = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "Layer Selection:")
         left_sizer.Add(sel_list_sizer, 1, wx.EXPAND)
         addsub_sizer = wx.BoxSizer(wx.VERTICAL)
         addsub_sizer.AddStretchSpacer(4)
-        right_button = wx.Button(self.panel, label="->")
+        right_button = wx.Button(left_box, label="->")
         right_button.Bind(wx.EVT_BUTTON, self.on_right)
         addsub_sizer.Add(right_button)
         addsub_sizer.AddStretchSpacer(1)
-        left_button = wx.Button(self.panel, label="<-")
+        left_button = wx.Button(left_box, label="<-")
         left_button.Bind(wx.EVT_BUTTON, self.on_left)
         addsub_sizer.Add(left_button)
         addsub_sizer.AddStretchSpacer(4)
@@ -63,14 +64,14 @@ class App(wx.App):
         lr_sizer = wx.BoxSizer(wx.HORIZONTAL)
         lr_sizer.Add(left_sizer, 2, wx.EXPAND | wx.ALL, 5)
 
-        self.plot_list = wx.ListBox(self.panel, choices=[])
+        self.plot_list = wx.ListBox(left_box, choices=[])
         plot_sizer = wx.BoxSizer(wx.VERTICAL)
         plot_sizer.Add(self.plot_list, 1, wx.EXPAND | wx.ALL, 10)
         ud_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.down_button = wx.Button(self.panel, label="Down")
+        self.down_button = wx.Button(left_box, label="Down")
         self.down_button.Bind(wx.EVT_BUTTON, self.on_down)
-        self.up_button = wx.Button(self.panel, label="Up")
+        self.up_button = wx.Button(left_box, label="Up")
         self.up_button.Bind(wx.EVT_BUTTON, self.on_up)
         ud_sizer.Add(self.up_button, 1)
         ud_sizer.AddSpacer(10)
@@ -79,34 +80,36 @@ class App(wx.App):
         left_sizer.Add(plot_sizer, 1, wx.EXPAND)
 
         right_sizer = wx.StaticBoxSizer(wx.VERTICAL, self.panel, "Configuration:")
-        dpi_label = wx.StaticText(self.panel, label="DPI:")
+        right_box = right_sizer.GetStaticBox()
+
+        dpi_label = wx.StaticText(right_box, label="DPI:")
         right_sizer.Add(dpi_label, 0, wx.ALL, 10)
-        self.dpi_box = wx.SpinCtrl(self.panel, initial=300, min=1, max=10000)
+        self.dpi_box = wx.SpinCtrl(right_box, initial=300, min=1, max=10000)
         self.dpi_box.Bind(wx.EVT_SPINCTRL, self.on_dpi_change)
         right_sizer.Add(self.dpi_box, 0, wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
 
-        result_label = wx.StaticText(self.panel, label="Resulting Resolution:")
+        result_label = wx.StaticText(right_box, label="Resulting Resolution:")
         right_sizer.Add(result_label, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
-        self.resolution_label_xy = wx.StaticText(self.panel, label="\t0x0")
+        self.resolution_label_xy = wx.StaticText(right_box, label="\t0x0")
         right_sizer.Add(self.resolution_label_xy, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
-        self.resolution_label_mp = wx.StaticText(self.panel, label="\t0x0")
+        self.resolution_label_mp = wx.StaticText(right_box, label="\t0x0")
         right_sizer.Add(self.resolution_label_mp, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
 
-        self.flip_flag = wx.CheckBox(self.panel, label="Flip && Mirror")
+        self.flip_flag = wx.CheckBox(right_box, label="Flip && Mirror")
         self.flip_flag.Value = False
         self.flip_flag.Bind(wx.EVT_CHECKBOX, self.on_flip_flag)
         right_sizer.Add(self.flip_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
-        self.order_flag = wx.CheckBox(self.panel, label="Use KiCad ordering")
+        self.order_flag = wx.CheckBox(right_box, label="Use KiCad ordering")
         self.order_flag.Value = True
         self.order_flag.Bind(wx.EVT_CHECKBOX, self.on_order_flag)
         right_sizer.Add(self.order_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
-        self.aa_flag = wx.CheckBox(self.panel, label="Anti-Aliasing")
+        self.aa_flag = wx.CheckBox(right_box, label="Anti-Aliasing")
         self.aa_flag.Value = False
         right_sizer.Add(self.aa_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
 
         right_sizer.AddStretchSpacer(1)
 
-        self.shoot_button = wx.Button(self.panel, label="📸 Generate PNG")
+        self.shoot_button = wx.Button(right_box, label="📸 Generate PNG")
         self.shoot_button.Bind(wx.EVT_BUTTON, self.on_shoot)
         right_sizer.Add(self.shoot_button, 1, wx.EXPAND | wx.ALL, 10)
 

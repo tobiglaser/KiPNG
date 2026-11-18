@@ -17,14 +17,18 @@ Tested on Linux and Windows. If you are able to provide feedback on macOS, pleas
 
 ## Usage
 
-1. To specify the viewport you want to export, select the board outline on the Edge.Cuts layer or a graphic rectangle.
+1. Viewport selection:
+   - By default, the Edge.Cuts shapes define the viewport.
+   - Select any other shape or shapes to specify their combined bounding box as a viewport.
 2. Open KiPNG
 3. Select any layers you want to export by moving them to the right column. Some presets are available on the bottom.
-4. Adjust the layer order with the buttons below the right column. To do so, deselect "Use KiCad ordering", which otherwise forces KiCads native layer order as seen in the initial left column.
+4. Adjust the layer order with the buttons below the right column.
 5. Specify a resolution in Dots per Inch.
 6. Adjust the other settings to your liking:
    - Flip & Mirror: Makes it, so the picture is looking at the back of the board.
+   - Use KiCad ordering: Forces KiCads native layer order like when exporting other formats.
    - Anti-Aliasing: Smooths jagged edges, creating a better looking picture.
 7. Do it, click the big button.
-8. Open the project folder to find the exported PNG named with the timestamp.  
-(Pictures are not shown in the file tree of the KiCad launcher.)
+8. Open the project folder to find the exported PNG named with the timestamp
+   or double-click the status bar to open the image directly.  
+   (Note that pictures are not shown in the file tree of the KiCad launcher.)

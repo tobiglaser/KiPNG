@@ -33,7 +33,7 @@ class App(wx.App):
         left_sizer = wx.StaticBoxSizer(wx.HORIZONTAL, self.panel, "Layer Selection:")
         left_box = left_sizer.GetStaticBox()
 
-        self.layer_list = wx.ListBox(left_box, choices=[])
+        self.layer_list = wx.ListBox(left_box, choices=[], style=wx.LB_MULTIPLE)
         self.layer_list.SetToolTipString("Available Layers")
         self.frontside_button = wx.Button(left_box, label="Front")
         self.frontside_button.SetToolTipString("Select Front Layers")
@@ -115,7 +115,7 @@ class App(wx.App):
         right_sizer.Add(self.flip_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
         self.order_flag = wx.CheckBox(right_box, label="Use KiCad ordering")
         self.order_flag.SetToolTipString("Use KiCads native layer order or a custom order.")
-        self.order_flag.Value = True
+        self.order_flag.Value = False
         self.order_flag.Bind(wx.EVT_CHECKBOX, self.on_order_flag)
         right_sizer.Add(self.order_flag, 0, wx.BOTTOM | wx.LEFT | wx.RIGHT, 10)
         self.aa_flag = wx.CheckBox(right_box, label="Anti-Aliasing")
@@ -235,6 +235,7 @@ class App(wx.App):
     def on_left(self, event) -> None:
         all = self.plot_list.GetStrings()
         selections = self.plot_list.GetSelections()
+        if not selections: return
 
         new = self.layer_list.GetStrings()
         for item in selections:
@@ -251,6 +252,11 @@ class App(wx.App):
         for item in reversed(selections):
             all.remove(all[item])
         self.plot_list.Set(all)
+        count = self.plot_list.GetCount()
+        index = max(selections)
+        if index >= count:
+            index = count - 1
+        self.plot_list.SetSelection(index)
 
     def on_up(self, event) -> None:
         index = self.plot_list.GetSelection()

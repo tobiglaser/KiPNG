@@ -2,6 +2,8 @@ import wx
 from math import ceil
 from os import path
 from typing import Callable, Dict
+import sys
+import subprocess
 
 
 def Error(message: str):
@@ -14,6 +16,8 @@ def Error(message: str):
 class App(wx.App):
     def OnInit(self):
         self.frame = wx.Frame(parent=None, title='KiPNG')
+        self.status_bar = self.frame.CreateStatusBar()
+        self.status_bar.Bind(wx.EVT_LEFT_DCLICK, self.on_status_click)
         
         script_dir = path.dirname(path.abspath(__file__))
         png_path = path.join(script_dir, 'icons', 'icon.png')
@@ -133,6 +137,7 @@ class App(wx.App):
         return True
 
     def run(self):
+        self.last_image_path = ""
         self.on_dpi_change(None)
         self.on_order_flag(None)
         self.frame.Fit()
@@ -314,11 +319,23 @@ class App(wx.App):
         settings["keep_order"] = self.order_flag.Value
         settings["antialiasing"] = self.aa_flag.Value
         if self.shoot_callback:
-            self.shoot_callback(settings)
+            export_name = self.shoot_callback(settings)
+            self.last_image_path = export_name
+            self.status_bar.PushStatusText(f"Image saved to: \"{export_name}\"    (Double-click to open)")
     
     def set_callback(self, func: Callable) -> None:
         self.shoot_callback = func
 
+    def on_status_click(self, event) -> None:
+        #https://stackoverflow.com/questions/35304492/python-open-multiple-images-in-default-image-viewer
+        def openImage(path):
+            imageViewerFromCommandLine = {'linux':'xdg-open',
+                                        'win32':'explorer',
+                                        'darwin':'open'}[sys.platform]
+            subprocess.Popen([imageViewerFromCommandLine, path])
+        if self.last_image_path:
+            if self.last_image_path in self.status_bar.GetStatusText():
+                openImage(self.last_image_path)
 
 
 

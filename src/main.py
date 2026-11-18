@@ -13,7 +13,7 @@ from time import strftime
 import shlex
 
 
-def generate_png(settings: Dict) -> None:
+def generate_png(settings: Dict) -> str:
     print(settings)
     kicad = KiCad()
 
@@ -132,21 +132,25 @@ def generate_png(settings: Dict) -> None:
             for yi in range(y_steps):
                 image = Image.open(path.join(cache_dir, f"{xi}{yi}.png"))
                 final_image.paste(image, (xi * image.width, yi * image.height))
-        
-        final_image.save(path.join(project_path, f"{strftime('%Y%m%d-%H%M%S')}.png"))
+
+        export_name = f"{strftime('%Y%m%d-%H%M%S')}.png"
+        final_image.save(path.join(project_path, export_name))
+        return path.join(project_path, export_name)
     
     else:
         root.set('width', str(x_stride))
         root.set('height', str(y_stride))
         root.set('viewBox', f"{xmin} {ymin} {x_stride} {y_stride}")
 
+        export_name = f"{strftime('%Y%m%d-%H%M%S')}.png"
         cairosvg.svg2png(bytestring=etree.tostring(root),
-            write_to=path.join(project_path, f"{strftime('%Y%m%d-%H%M%S')}.png"),
+            write_to=path.join(project_path, export_name),
             dpi=dpi,
             output_width=x_pixels,
             output_height=y_pixels,
             negate_colors=False,
             )
+        return path.join(project_path, export_name)
 
 
 

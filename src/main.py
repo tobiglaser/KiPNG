@@ -166,21 +166,36 @@ if __name__ == "__main__":
         print(layer)
     selected_items = board.get_selection()
     print(selected_items)
-    if len(selected_items) == 1 and type(selected_items[0]) == BoardRectangle:
-        rect = selected_items[0]
-        viewport_x1 = to_mm(rect.top_left.x)
-        viewport_x2 = to_mm(rect.bottom_right.x)
-        viewport_y1 = to_mm(rect.top_left.y)
-        viewport_y2 = to_mm(rect.bottom_right.y)
-    elif len(selected_items) == 1 and type(selected_items[0]) == BoardPolygon and selected_items[0].layer == BoardLayer.BL_Edge_Cuts:
-        bb = selected_items[0].bounding_box()
-        viewport_x1 = to_mm(bb.pos.x)
-        viewport_x2 = to_mm(bb.pos.x + bb.size.x)
-        viewport_y1 = to_mm(bb.pos.y)
-        viewport_y2 = to_mm(bb.pos.y + bb.size.y)
+    if selected_items:
+        selected_items = board._to_concrete_items(selected_items)
+        bounding_boxes = board.get_item_bounding_box(selected_items, include_text=True)
+        viewport_x1 =  1e9
+        viewport_x2 = -1e9
+        viewport_y1 =  1e9
+        viewport_y2 = -1e9
+        for bb in bounding_boxes:
+            if not bb: continue
+            viewport_x1 = min(viewport_x1, to_mm(bb.pos.x))
+            viewport_x2 = max(viewport_x2, to_mm(bb.pos.x + bb.size.x))
+            viewport_y1 = min(viewport_y1, to_mm(bb.pos.y))
+            viewport_y2 = max(viewport_y2, to_mm(bb.pos.y + bb.size.y))
     else:
-        Error("\nPlease select a Rectangle or the PCB edge polygon as Viewport.\n\n(Ideally on a Layer you don't want to plot.)\nRotation is currently not supported.")
-        exit()
+        shapes = board.get_shapes()
+        ec_shapes = [shape for shape in shapes if shape.layer == BoardLayer.BL_Edge_Cuts]
+        if not ec_shapes:
+            Error("\nPlease select a Rectangle, the PCB edge polygon or any objects to specify a Viewport.\n\n")
+            exit()
+        bounding_boxes = board.get_item_bounding_box(ec_shapes)
+        viewport_x1 =  1e9
+        viewport_x2 = -1e9
+        viewport_y1 =  1e9
+        viewport_y2 = -1e9
+        for bb in bounding_boxes:
+            if not bb: continue
+            viewport_x1 = min(viewport_x1, to_mm(bb.pos.x))
+            viewport_x2 = max(viewport_x2, to_mm(bb.pos.x + bb.size.x))
+            viewport_y1 = min(viewport_y1, to_mm(bb.pos.y))
+            viewport_y2 = max(viewport_y2, to_mm(bb.pos.y + bb.size.y))
     del board
 
     app = App(redirect=False)

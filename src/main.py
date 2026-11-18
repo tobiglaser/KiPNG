@@ -24,14 +24,14 @@ def generate_png(settings: Dict) -> None:
     exe = ""
     if cli_path.__contains__("/app/") and not environ.get("FLATPAK_ID"):
         # kicad in flatpak, but script external
-        exe = "flatpak run --command=kicad-cli org.kicad.KiCad"
+        exe = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
     elif cli_path.__contains__("kicad-nightly"):
         # suspecting copr nightly version
         cli_path = kicad.get_kicad_binary_path("kicad-cli-nightly")
         print("cli_path: ", cli_path)
-        exe = cli_path
+        exe = [cli_path]
     else:
-        exe = cli_path
+        exe = [cli_path]
     print("exec: ", exe)
 
     project_path = board.document.project.path
@@ -54,7 +54,7 @@ def generate_png(settings: Dict) -> None:
     output_path = path.join(cache_dir, "one_file.svg") if settings["keep_order"] else cache_dir
     
     cmd = [
-        exe,
+        *(exe),
         'pcb', 'export', 'svg',
         '--output', output_path,
         '--layers', ','.join(layer_list),
